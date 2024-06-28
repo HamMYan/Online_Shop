@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateCardDto } from './create-card.dto';
 
-export class UpdateCardDto extends PartialType(CreateCardDto) {}
+export class UpdateCardDto{
+    @ApiProperty()
+    quantity: number
+}

@@ -16,8 +16,8 @@ export class User {
     password: string
     @Prop()
     image: string
-    @Prop({ default: Role.CUSTOMER })
-    role: [Role.ADMIN, Role.MANAGER, Role.CUSTOMER]
+    @Prop()
+    role: Role[]
     @Prop({ default: false })
     isVerify: boolean
     @Prop()

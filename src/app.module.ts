@@ -12,6 +12,10 @@ import { CustomerModule } from './customer/customer.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { CardModule } from './card/card.module';
 import { OrderModule } from './order/order.module';
+import { EmailModule } from './email/email.module';
+import { ConfigModule } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
+
 
 @Module({
   imports: [
@@ -25,7 +29,18 @@ import { OrderModule } from './order/order.module';
     CustomerModule,
     FeedbackModule,
     CardModule,
-    OrderModule
+    OrderModule,
+    EmailModule,
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),  
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,9 +8,9 @@ export type FeedBackDocument = HydratedDocument<Feedback>;
 
 @Schema()
 export class Feedback {
-    @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }] })
+    @Prop({ type: mongoose.Schema.ObjectId, ref: 'Product' })
     product: Product
-    @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Customer' }] })
+    @Prop({ type: mongoose.Schema.ObjectId, ref: 'Customer' })
     costomer: Customer
     @Prop()
     text: string
