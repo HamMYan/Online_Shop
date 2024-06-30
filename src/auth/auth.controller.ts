@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -21,7 +22,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
@@ -30,6 +31,20 @@ export class AuthController {
       return res.status(HttpStatus.CREATED).json(data);
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+    }
+  }
+
+  @Get('/verify')
+  async isVerify(
+    @Query('email') email: string,
+    @Query('emailToken') emailToken: string,
+    @Res() res: Response) {
+    try {
+      const data = await this.userService.isVerify(email, emailToken)
+      return res.status(HttpStatus.OK).json(data)
+    }
+    catch (err) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
     }
   }
 }
