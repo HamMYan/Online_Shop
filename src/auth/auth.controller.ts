@@ -9,12 +9,16 @@ import {
   Res,
   HttpStatus,
   Query,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { Login } from 'src/user/dto/update-user.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -32,6 +36,12 @@ export class AuthController {
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
     }
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Request() req, @Body() log: Login){
+    return this.authService.login(req.user)
   }
 
   @Get('/verify')

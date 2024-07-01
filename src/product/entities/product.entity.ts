@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Category } from 'src/category/entities/category.entity';
 import { Feedback } from 'src/feedback/entities/feedback.entity';
@@ -24,6 +24,27 @@ export class Product {
 
   @Prop()
   description: string;
+
+  @Prop(
+    raw({
+      size: [
+        {
+          type: {
+            str: { type: String },
+            color: { type: String },
+            count: { type: Number },
+          },
+        },
+      ],
+      color: [{ type: { str: { type: String }, count: { type: Number } } }],
+      date: { type: String },
+    })
+  )
+  other: {
+    size: { str: string; color: string; count: number }[];
+    color: { str: string; count: number }[];
+    date: string;
+  };
 
   @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'SubCategory' }] })
   subCategory: SubCategory[];

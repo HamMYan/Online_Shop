@@ -5,8 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CategorySchema } from './entities/category.entity';
 
 @Module({
-  imports:[MongooseModule.forFeature([{name:'Category',schema:CategorySchema}])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'Category', schema: CategorySchema }]),
+  ],
   controllers: [CategoryController],
   providers: [CategoryService],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

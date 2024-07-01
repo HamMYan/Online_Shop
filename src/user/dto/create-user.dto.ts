@@ -34,7 +34,7 @@ export class CreateUserDto {
   @ApiProperty()
   phoneNumber: string;
 
-  @JoiSchema(Joi.string().required())
+  @JoiSchema(Joi.string())
   @ApiProperty()
   description: string;
 }

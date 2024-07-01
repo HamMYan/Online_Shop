@@ -29,17 +29,14 @@ export class UserService {
     if (userInUsername) throw new ForbiddenException(`Username - ${username} has arleady`)
     if (userInPhonenumber) throw new ForbiddenException(`PhoneNumber - ${phoneNumber} has arleady`)
 
-    await this.userModel.create({ firstName, lastName, username, password: hashedPassword, phoneNumber, description, role, code })
-
+   const user =  await this.userModel.create({ firstName, lastName, username, password: hashedPassword, phoneNumber, description, role, code })
     if (role.includes(1)) {
-      const user = await this.userModel.findOne({ username })
       await this.managerModel.create({
         user: user.id,
         description
       })
     }
     if (role.includes(2)) {
-      const user = await this.userModel.findOne({ username })   
       await this.customerModel.create({
         user: user.id,
       })
@@ -48,7 +45,7 @@ export class UserService {
     const message = `Please click   
      <a href='http://localhost:3000/auth/verify?email=${username}&emailToken=${code}'>here</a> for verify`
 
-    await this.emailService.sendMail("hammkrtchyan7@gmail.com", `Hello dear ${username} welcome our site`, message)
+     this.emailService.sendMail("hammkrtchyan7@gmail.com", `Hello dear ${username} welcome our site`, message)
 
     return { firstName, lastName, username, password, phoneNumber, description };
   }
@@ -69,6 +66,9 @@ export class UserService {
 
   async findOne(id: number) {
     return `This action returns a #${id} user`;
+  }
+  async findOneUsername(username: string) {
+    return  await this.userModel.findOne({username})
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

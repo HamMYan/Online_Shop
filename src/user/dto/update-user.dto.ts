@@ -4,7 +4,6 @@ import { JoiSchema } from 'nestjs-joi';
 import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto {
-
   @JoiSchema(Joi.string().required())
   @ApiProperty()
   firstName: string;
@@ -28,4 +27,13 @@ export class UpdateUserDto {
   @JoiSchema(Joi.string().required())
   @ApiProperty()
   description: string;
+}
+
+export class Login {
+  @JoiSchema(Joi.string().required())
+  @ApiProperty()
+  username: string;
+  @JoiSchema(Joi.string().required())
+  @ApiProperty()
+  password: string;
 }
