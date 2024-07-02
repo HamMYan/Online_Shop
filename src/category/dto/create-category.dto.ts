@@ -1,10 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { Product } from "src/product/entities/product.entity"
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCategoryDto {
-    @ApiProperty()
-    name: string
-    @ApiProperty()
-    image: string
-}
+  @ApiProperty()
+  name: string;
 
+  @ApiProperty({ type: 'string', format: 'binary', description: 'Upload Images' })
+  image: string;
+
+  @ApiProperty()
+  subCategory: string[]
+}
