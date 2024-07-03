@@ -16,13 +16,8 @@ export class Manager {
     @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }] })
     product: Product[]
     
-    @Prop(raw({
-        number: { type: String },
-        name: { type: String },
-        date: { type: String },
-        cvv: { type: Number }
-      }))
-    payment: Payment;
+    @Prop()
+    cardNumber: string;
       
 }
 

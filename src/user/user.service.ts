@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid'
 import { EmailService } from 'src/email/email.service';
 import { Manager } from 'src/manager/entities/manager.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
+import { Role } from './entities/role-enum';
 
 @Injectable()
 export class UserService {
@@ -29,23 +30,27 @@ export class UserService {
     if (userInUsername) throw new ForbiddenException(`Username - ${username} has arleady`)
     if (userInPhonenumber) throw new ForbiddenException(`PhoneNumber - ${phoneNumber} has arleady`)
 
-   const user =  await this.userModel.create({ firstName, lastName, username, password: hashedPassword, phoneNumber, description, role, code })
-    if (role.includes(1)) {
-      await this.managerModel.create({
-        user: user.id,
+    const user = await this.userModel.create({ firstName, lastName, username, password: hashedPassword, phoneNumber, description, role, code })
+    if (role.includes(Role.MANAGER)) {
+      const manager = await this.managerModel.create({
+        user: user,
+        _id: user._id,
         description
       })
+      await this.userModel.findByIdAndUpdate(user.id, { manager })
     }
-    if (role.includes(2)) {
-      await this.customerModel.create({
-        user: user.id,
+    if (role.includes(Role.CUSTOMER)) {
+      const customer = await this.customerModel.create({
+        user: user,
+        _id: user._id
       })
+      await this.userModel.findByIdAndUpdate(user.id, { customer })
     }
 
     const message = `Please click   
      <a href='http://localhost:3000/auth/verify?email=${username}&emailToken=${code}'>here</a> for verify`
 
-     this.emailService.sendMail("hammkrtchyan7@gmail.com", `Hello dear ${username} welcome our site`, message)
+    this.emailService.sendMail("hammkrtchyan7@gmail.com", `Hello dear ${username} welcome our site`, message)
 
     return { firstName, lastName, username, password, phoneNumber, description };
   }
@@ -68,7 +73,7 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
   async findOneUsername(username: string) {
-    return  await this.userModel.findOne({username})
+    return await this.userModel.findOne({ username })
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

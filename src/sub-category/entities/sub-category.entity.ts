@@ -10,10 +10,10 @@ export class SubCategory {
     @Prop()
     name: string
 
-    @Prop({type:mongoose.Schema.ObjectId,ref:'Category'})
+    @Prop({ type: mongoose.Schema.ObjectId, ref: 'Category' })
     category: Category
 
-    @Prop({type:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]})
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
     pruduct: Product[]
 }
 

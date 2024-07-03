@@ -1,12 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
+import * as Joi from 'joi';
+import { JoiSchema } from 'nestjs-joi';
 
 export class CreateCategoryDto {
+  @JoiSchema(Joi.string().required())
   @ApiProperty()
   name: string;
-
-  @ApiProperty({ type: 'string', format: 'binary', description: 'Upload Images' })
-  image: string;
-
-  @ApiProperty()
-  subCategory: string[]
 }

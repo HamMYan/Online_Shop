@@ -25,7 +25,6 @@ export class CategoryController {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        subCategory: { type: 'array', items: { type: 'string' } },
         image: { type: 'string', format: 'binary' },
       },
     },
@@ -42,22 +41,63 @@ export class CategoryController {
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  async findAll(@Res() res: Response) {
+    try {
+      const data = await this.categoryService.findAll()
+      return res.status(HttpStatus.OK).json(data)
+    }
+    catch (err) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const data = await this.categoryService.findOne(id)
+      return res.status(HttpStatus.OK).json(data)
+    }
+    catch (err) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+    }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        image: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('image', multerOptions))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(+id, updateCategoryDto);
+  async update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto, @UploadedFile() file, @Res() res: Response) {
+    try {
+      const data = await this.categoryService.update(id, updateCategoryDto, file)
+      return res.status(HttpStatus.OK).json(data)
+    }
+    catch (err) {
+      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+    }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  async remove(@Param('id') id: string,@Res() res: Response) {
+    try {
+      const data = await this.categoryService.remove(id)
+      return res.status(HttpStatus.OK).json(data)
+    }
+    catch (err) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+    }
   }
 }

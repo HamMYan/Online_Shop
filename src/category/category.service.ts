@@ -10,32 +10,50 @@ export class CategoryService {
   constructor(@InjectModel('Category') private categoryModel: Model<Category>) { }
 
   async create(createCategoryDto: CreateCategoryDto, file) {
-    const image = createCategoryDto.image = file.path
-    const { name,subCategory } = createCategoryDto
-
-    const cat = await this.categoryModel.findOne({name})
-    if(cat) throw new ForbiddenException(`${name} - has arleady`)
+    const image = file.path
+    const { name } = createCategoryDto
+    const cat = await this.categoryModel.findOne({ name })
+    if (cat) throw new ForbiddenException(`${name} - has arleady`)
 
     const category = await this.categoryModel.create({
       name,
-        image
+      image
     })
     return category
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll() {
+    const categories = await this.categoryModel.find().populate('subCategory')
+    if (!categories) throw new NotFoundException('Categories not found')
+    return categories
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    const category = await this.categoryModel.findById(id)
+    if (!category) throw new NotFoundException('Category not found')
+    return category
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto, file) {
+    const { name } = updateCategoryDto
+
+    const category = await this.categoryModel.findById(id)
+    const cat = await this.categoryModel.findOne({ name })
+
+    if (!category) throw new NotFoundException('Category not found')
+    if (cat) throw new ForbiddenException(`${name} - has arleady`)
+
+    await this.categoryModel.findByIdAndUpdate(id, {
+      name,
+      image: file.path
+    })
+    return { message: 'Category updated' }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const category = await this.categoryModel.findById(id)
+    if (!category) throw new NotFoundException('Category not found')
+    await this.categoryModel.findByIdAndDelete(id)
+    return { message: 'Category deleted' }
   }
 }
