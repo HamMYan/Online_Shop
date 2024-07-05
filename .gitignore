@@ -35,5 +35,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # Dist
-
 /dist
+
+#Uploads
+/uploads/

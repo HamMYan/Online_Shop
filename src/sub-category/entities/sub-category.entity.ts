@@ -10,11 +10,11 @@ export class SubCategory {
     @Prop()
     name: string
 
-    @Prop({ type: mongoose.Schema.ObjectId, ref: 'Category' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
     category: Category
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
-    pruduct: Product[]
+    products: Product[]
 }
 
 export const SubCategorySchema = SchemaFactory.createForClass(SubCategory)

@@ -14,10 +14,9 @@ import { RoleGuard } from 'src/auth/roles.guard';
 export class SubCategoryController {
   constructor(private readonly subCategoryService: SubCategoryService) { }
 
-  @ApiBearerAuth('JWT-auth')
-  @HasRoles(Role.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @ApiConsumes('multipart/form-data')
+  // @ApiBearerAuth('JWT-auth')
+  // @HasRoles(Role.ADMIN)
+  // @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
   async create(@Body() createSubCategoryDto: CreateSubCategoryDto, @Res() res: Response) {
     try {
@@ -53,7 +52,6 @@ export class SubCategoryController {
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @ApiConsumes('multipart/form-data')
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateSubCategoryDto: UpdateSubCategoryDto, @Res() res: Response) {
     try {
@@ -68,7 +66,6 @@ export class SubCategoryController {
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @ApiConsumes('multipart/form-data')
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {

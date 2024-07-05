@@ -40,22 +40,18 @@ export class Product {
       date: { type: String },
     })
   )
-  other: {
-    size: { str: string; color: string; count: number }[];
-    color: { str: string; count: number }[];
-    date: string;
-  };
+  other:Record<string, any>
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'SubCategory' }] })
-  subCategory: SubCategory[];
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory' })
+  subCategory: SubCategory;
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Manager' }] })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Manager' })
   manager: Manager;
 
   @Prop({ default: ProductStatus.PENDING })
   status: ProductStatus;
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Feedback' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Feedback' }] })
   feedback: Feedback[];
 }
 

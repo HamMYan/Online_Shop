@@ -9,5 +9,6 @@ import { CategorySchema } from 'src/category/entities/category.entity';
   imports: [MongooseModule.forFeature([{ name: 'SubCategory', schema: SubCategorySchema }, { name: 'Category', schema: CategorySchema }])],
   controllers: [SubCategoryController],
   providers: [SubCategoryService],
+  exports: [SubCategoryService]
 })
 export class SubCategoryModule { }

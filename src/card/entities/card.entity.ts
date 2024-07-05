@@ -6,7 +6,7 @@ export type CardDocument = HydratedDocument<Card>;
 
 @Schema()
 export class Card {
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
   product: Product[];
   @Prop({ default: 1 })
   quantity: number;

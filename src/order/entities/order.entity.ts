@@ -11,7 +11,7 @@ export class Order {
   @Prop()
   total: number;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: 'Customer' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })
   customer: Customer;
 
   @Prop()

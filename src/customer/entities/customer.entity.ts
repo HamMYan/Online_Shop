@@ -18,19 +18,19 @@ export interface Payment {
 export class Customer {
   _id: string;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
   wish: Product[];
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Card' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }] })
   card: Card[];
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Order' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }] })
   order: Order[];
 
-  @Prop({ type: [{ type: mongoose.Schema.ObjectId, ref: 'Feedback' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Feedback' }] })
   feedback: Feedback[];
 
   @Prop([
