@@ -10,7 +10,7 @@ export class CategoryService {
   constructor(@InjectModel('Category') private categoryModel: Model<Category>) { }
 
   async create(createCategoryDto: CreateCategoryDto, file) {
-    const image = file.path
+    const image = file.filename
     const { name } = createCategoryDto
     const cat = await this.categoryModel.findOne({ name })
     if (cat) throw new ForbiddenException(`${name} - has arleady`)
@@ -45,7 +45,7 @@ export class CategoryService {
 
     await this.categoryModel.findByIdAndUpdate(id, {
       name,
-      image: file.path
+      image: file.filename
     })
     return { message: 'Category updated' }
   }

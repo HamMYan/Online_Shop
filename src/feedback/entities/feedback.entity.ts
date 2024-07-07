@@ -8,14 +8,17 @@ export type FeedBackDocument = HydratedDocument<Feedback>;
 
 @Schema()
 export class Feedback {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Product' })
-    product: Product
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })
-    costomer: Customer
     @Prop()
     text: string
+
     @Prop()
     role: Role
+
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Product' })
+    product: Product
+
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })
+    customer: Customer
 }
 
 export const FeedbackSchema = SchemaFactory.createForClass(Feedback)

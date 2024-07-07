@@ -38,4 +38,4 @@ lerna-debug.log*
 /dist
 
 #Uploads
-/uploads/
+/uploads    

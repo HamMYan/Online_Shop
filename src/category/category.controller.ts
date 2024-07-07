@@ -16,9 +16,9 @@ import { Role } from 'src/user/entities/role-enum';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) { }
 
-  // @ApiBearerAuth('JWT-auth')
-  // @HasRoles(Role.ADMIN)
-  // @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
