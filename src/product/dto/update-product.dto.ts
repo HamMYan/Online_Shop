@@ -32,7 +32,4 @@ export class UpdateSubCategory {
     subCategory: string;
   }
 
-
-//deleteFeedback
-
 //updateOther/:name, obj
