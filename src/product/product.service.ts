@@ -22,7 +22,7 @@ export class ProductService {
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('SubCategory') private subCategoryModel: Model<SubCategory>,
     @InjectModel('Manager') private managerModel: Model<Manager>,
-  ) {}
+  ) { }
 
   async create(createProductDto: CreateProductDto, files, req) {
     const { name, price, count, description, subCategory, other } =
@@ -61,7 +61,7 @@ export class ProductService {
     const products = await this.productModel
       .find({ status: 1 })
       .populate('subCategory');
-    if (!products.length) throw new NotFoundException('There are no products');
+    if (!products.length) return { message: 'There are no products' };
     return products;
   }
 
@@ -69,7 +69,7 @@ export class ProductService {
     const products = await this.productModel
       .find({ status: 0 })
       .populate('subCategory');
-    if (!products.length) throw new NotFoundException('There are no products');
+    if (!products.length) return { message: 'There are no products' };
     return products;
   }
 
@@ -77,7 +77,7 @@ export class ProductService {
     const products = await this.productModel
       .find({ manager: req.user.id })
       .populate('subCategory');
-    if (!products.length) throw new NotFoundException('There are no products');
+    if (!products.length) return { message: 'There are no products' };
     return products;
   }
 
@@ -86,7 +86,7 @@ export class ProductService {
       manager: req.user.id,
       status: -1,
     });
-    if (!products) throw new NotFoundException('There are no products');
+    if (!products) return { message:'There are no products'}
     return products;
   }
 
@@ -164,8 +164,8 @@ export class ProductService {
     return { message: 'Sub Category Updated' };
   }
 
-  async updateOther(id, updateOther,name, req) {
-    if(name !== 'add' && name !== 'change') return {message:'There is no such option, you need to add or change it'}
+  async updateOther(id, updateOther, name, req) {
+    if (name !== 'add' && name !== 'change') return { message: 'There is no such option, you need to add or change it' }
     const product = await this.productModel.findById(id);
     if (!product) throw new BadRequestException('Product not found');
     if (req.user.id !== product.manager._id.toString())
@@ -173,33 +173,31 @@ export class ProductService {
         'You update this product other because you did not install that product',
       );
 
-    if(name == 'add'){
-      const size  =  updateOther.size?.length?[...product.other.size, ...updateOther.size]:product.other.size;
-      const color  =  updateOther.color?.length?[...product.other.color, ...updateOther.size]:product.other.size;
-      const date  =  updateOther.date? updateOther.date:product.other.date;
+    if (name == 'add') {
+      const size = updateOther.size?.length ? [...product.other.size, ...updateOther.size] : product.other.size;
+      const color = updateOther.color?.length ? [...product.other.color, ...updateOther.color] : product.other.color;
 
-      await this.productModel.findByIdAndUpdate(id,{
-        size,
-        color,
-        date
-      })
+      await this.productModel.findByIdAndUpdate(id, {
+        'other.size': size,
+        'other.color': color,
+      });
 
-      return {message: 'Product other is added'}
-    }
-    else if(name == 'change'){
-      const size  =  updateOther.size?.length?[...updateOther.size]:product.other.size;
-      const color  =  updateOther.color?.length?[...updateOther.size]:product.other.size;
-      const date  =  updateOther.date? updateOther.date:product.other.date;
-
-      await this.productModel.findByIdAndUpdate(id,{
-        size,
-        color,
-        date
-      })
-
-      return {message: 'Product other is changed'}
+      return { message: 'Product other is added' };
     }
 
+    else if (name == 'change') {
+      const size = updateOther.size?.length ? [...updateOther.size] : product.other.size;
+      const color = updateOther.color?.length ? [...updateOther.color] : product.other.color;
+      const date = updateOther.date ? updateOther.date : product.other.date;
+
+      await this.productModel.findByIdAndUpdate(id, {
+        'other.size': size,
+        'other.color': color,
+        'other.date': date
+      });
+
+      return { message: 'Product other is changed' };
+    }
   }
 
   async deleteImage(id, imageName, req) {

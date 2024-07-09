@@ -1,7 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
-import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto {
   @JoiSchema(Joi.string().required())
@@ -19,8 +18,8 @@ export class UpdateUserDto {
   @JoiSchema(Joi.string().required())
   @ApiProperty()
   phoneNumber: string;
-
 }
+
 
 export class Login {
   @JoiSchema(Joi.string().required())
@@ -32,17 +31,13 @@ export class Login {
   password: string;
 }
 
-export class UpdateImage {
-  @ApiProperty()
-  image: string
-}
 
 export class UpdtaeUserPassword {
   @JoiSchema(Joi.string().required())
   @ApiProperty()
   oldPassword: string
 
-  @JoiSchema(Joi.string().required())
+  @JoiSchema(Joi.string().min(6).max(8).required())
   @ApiProperty()
   newPassword: string
 
@@ -51,16 +46,17 @@ export class UpdtaeUserPassword {
   confirmPassword: string
 }
 
+
 export class ResetPassword {
   @JoiSchema(Joi.string().required())
   @ApiProperty()
-  code: number
+  code: string
 
-  @JoiSchema(Joi.string().required())
+  @JoiSchema(Joi.string().min(6).max(8).required())
   @ApiProperty()
-  newPassword: number
+  newPassword: string
 
   @JoiSchema(Joi.string().valid(Joi.ref('newPassword')).required())
   @ApiProperty()
-  oldPassword: number
+  confirmPassword: string
 }

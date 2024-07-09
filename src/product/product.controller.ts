@@ -115,39 +115,24 @@ export class ProductController {
   }
 
   @Get()
-  async findAll(@Res() res: Response) {
-    try {
-      const data = await this.productService.findAll();
-      return res.status(HttpStatus.OK).json(data);
-    } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
-    }
+  async findAll() {
+    return await this.productService.findAll();
   }
 
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('allPendingProducts')
-  async allPendingProducts(@Res() res: Response) {
-    try {
-      const data = await this.productService.allPendingProducts();
-      return res.status(HttpStatus.OK).json(data);
-    } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
-    }
+  async allPendingProducts() {
+    return await this.productService.allPendingProducts();
   }
 
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('myAllProducts')
-  async findMyAllProducts(@Req() req: Request, @Res() res: Response) {
-    try {
-      const data = await this.productService.findMyAllProducts(req);
-      return res.status(HttpStatus.OK).json(data);
-    } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
-    }
+  async findMyAllProducts(@Req() req: Request) {
+    return await this.productService.findMyAllProducts(req);
   }
 
   @ApiBearerAuth('JWT-auth')
@@ -155,12 +140,7 @@ export class ProductController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('myRejectedProds')
   async myRejectedProds(@Req() req: Request, @Res() res: Response) {
-    try {
-      const data = await this.productService.myRejectedProds(req);
-      return res.status(HttpStatus.OK).json(data);
-    } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
-    }
+    return await this.productService.myRejectedProds(req);
   }
 
   @Get(':id')

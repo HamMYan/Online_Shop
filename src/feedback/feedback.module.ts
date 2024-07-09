@@ -14,5 +14,6 @@ import { CustomerSchema } from 'src/customer/entities/customer.entity';
   ])],
   controllers: [FeedbackController],
   providers: [FeedbackService],
+  exports: [FeedbackService]
 })
-export class FeedbackModule {}
+export class FeedbackModule { }

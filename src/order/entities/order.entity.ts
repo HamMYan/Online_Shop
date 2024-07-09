@@ -11,9 +11,6 @@ export class Order {
   @Prop()
   total: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })
-  customer: Customer;
-
   @Prop()
   status: OrderStatus;
 
@@ -33,6 +30,10 @@ export class Order {
     productId: string;
     quantity: number;
   }[];
+
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })
+  customer: Customer;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
