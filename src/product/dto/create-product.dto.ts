@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
+import { UpdateOther } from './update-product.dto';
 
 export class CreateProductDto {
   @JoiSchema(Joi.string().required())
@@ -28,9 +29,5 @@ export class CreateProductDto {
 
 
   @ApiProperty()
-  other: {
-    size: { str: string; color: string; count: number }[];
-    color: { str: string; count: number }[];
-    date: string;
-  };
+  other: UpdateOther
 }

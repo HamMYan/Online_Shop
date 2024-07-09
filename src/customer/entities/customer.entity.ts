@@ -7,6 +7,7 @@ import { Product } from 'src/product/entities/product.entity';
 import { User } from 'src/user/entities/user.entity';
 
 export type CustomerDocument = HydratedDocument<Customer>;
+
 export interface Payment {
   number: string;
   name: string;

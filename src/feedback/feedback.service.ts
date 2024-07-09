@@ -5,12 +5,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Feedback } from './entities/feedback.entity';
 import { Product } from 'src/product/entities/product.entity';
+import { Customer } from 'src/customer/entities/customer.entity';
 
 @Injectable()
 export class FeedbackService {
   constructor(
     @InjectModel('Feedback') private feedbackModel: Model<Feedback>,
-    @InjectModel('Product') private productModel: Model<Product>
+    @InjectModel('Product') private productModel: Model<Product>,
+    @InjectModel('Customer') private customerModel: Model<Customer>
   ) { }
 
   async create(createFeedbackDto: CreateFeedbackDto, product: string, req) {
@@ -18,6 +20,8 @@ export class FeedbackService {
     const prod = await this.productModel.findOne({ id: product, status: 1 })
 
     if (!product) throw new BadRequestException('Product not found')
+
+    // const customer = 
 
     const feedback = await this.feedbackModel.create({
       product,
