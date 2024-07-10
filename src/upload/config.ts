@@ -21,7 +21,7 @@ export const multerOptions = {
       cb(
         new HttpException(
           `Unsuported file type ${extname(file.originalname)}`,
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.OK,
         ),
         false,
       );

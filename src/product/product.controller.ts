@@ -99,7 +99,7 @@ export class ProductController {
   async create(
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() files,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
@@ -110,7 +110,7 @@ export class ProductController {
       );
       return res.status(HttpStatus.CREATED).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -131,7 +131,7 @@ export class ProductController {
   @HasRoles(Role.MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('myAllProducts')
-  async findMyAllProducts(@Req() req: Request) {
+  async findMyAllProducts(@Req() req,) {
     return await this.productService.findMyAllProducts(req);
   }
 
@@ -139,7 +139,7 @@ export class ProductController {
   @HasRoles(Role.MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('myRejectedProds')
-  async myRejectedProds(@Req() req: Request, @Res() res: Response) {
+  async myRejectedProds(@Req() req, @Res() res: Response) {
     return await this.productService.myRejectedProds(req);
   }
 
@@ -149,7 +149,7 @@ export class ProductController {
       const data = await this.productService.findOne(id);
       return res.status(HttpStatus.CREATED).json(data);
     } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -160,7 +160,7 @@ export class ProductController {
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductData,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
@@ -171,7 +171,7 @@ export class ProductController {
       );
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -198,14 +198,14 @@ export class ProductController {
   async addImage(
     @Param('id') id: string,
     @UploadedFiles() files,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
       const data = await this.productService.addImage(id, files, req);
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -225,7 +225,7 @@ export class ProductController {
       );
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -269,7 +269,7 @@ export class ProductController {
     @Body() updateOther: UpdateOther,
     @Param('id') id: string,
     @Param('name') name: string,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
@@ -281,7 +281,7 @@ export class ProductController {
       );
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -292,7 +292,7 @@ export class ProductController {
   async updateSubCategory(
     @Query('subCategory') subCategory: string,
     @Param('id') id: string,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
@@ -303,7 +303,7 @@ export class ProductController {
       );
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -313,7 +313,7 @@ export class ProductController {
   @Delete('remaoveImage/:id')
   async removeImage(
     @Param('id') id: string,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
     @Query('imageName') imageName: string,
   ) {
@@ -321,7 +321,7 @@ export class ProductController {
       const data = await this.productService.deleteImage(id, imageName, req);
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -331,14 +331,14 @@ export class ProductController {
   @Delete(':id')
   async remove(
     @Param('id') id: string,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
       const data = await this.productService.remove(id, req);
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 }

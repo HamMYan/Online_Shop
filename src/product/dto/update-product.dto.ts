@@ -38,5 +38,3 @@ export interface UpdateOther {
   };
   date: { type: 'string' };
 }
-
-//updateOther/:name, obj

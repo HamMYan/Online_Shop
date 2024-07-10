@@ -22,7 +22,7 @@ export class ProductService {
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('SubCategory') private subCategoryModel: Model<SubCategory>,
     @InjectModel('Manager') private managerModel: Model<Manager>,
-  ) { }
+  ) {}
 
   async create(createProductDto: CreateProductDto, files, req) {
     const { name, price, count, description, subCategory, other } =
@@ -86,7 +86,7 @@ export class ProductService {
       manager: req.user.id,
       status: -1,
     });
-    if (!products) return { message:'There are no products'}
+    if (!products) return { message: 'There are no products' };
     return products;
   }
 
@@ -165,7 +165,10 @@ export class ProductService {
   }
 
   async updateOther(id, updateOther, name, req) {
-    if (name !== 'add' && name !== 'change') return { message: 'There is no such option, you need to add or change it' }
+    if (name !== 'add' && name !== 'change')
+      return {
+        message: 'There is no such option, you need to add or change it',
+      };
     const product = await this.productModel.findById(id);
     if (!product) throw new BadRequestException('Product not found');
     if (req.user.id !== product.manager._id.toString())
@@ -174,8 +177,12 @@ export class ProductService {
       );
 
     if (name == 'add') {
-      const size = updateOther.size?.length ? [...product.other.size, ...updateOther.size] : product.other.size;
-      const color = updateOther.color?.length ? [...product.other.color, ...updateOther.color] : product.other.color;
+      const size = updateOther.size?.length
+        ? [...product.other.size, ...updateOther.size]
+        : product.other.size;
+      const color = updateOther.color?.length
+        ? [...product.other.color, ...updateOther.color]
+        : product.other.color;
 
       await this.productModel.findByIdAndUpdate(id, {
         'other.size': size,
@@ -183,17 +190,19 @@ export class ProductService {
       });
 
       return { message: 'Product other is added' };
-    }
-
-    else if (name == 'change') {
-      const size = updateOther.size?.length ? [...updateOther.size] : product.other.size;
-      const color = updateOther.color?.length ? [...updateOther.color] : product.other.color;
+    } else if (name == 'change') {
+      const size = updateOther.size?.length
+        ? [...updateOther.size]
+        : product.other.size;
+      const color = updateOther.color?.length
+        ? [...updateOther.color]
+        : product.other.color;
       const date = updateOther.date ? updateOther.date : product.other.date;
 
       await this.productModel.findByIdAndUpdate(id, {
         'other.size': size,
         'other.color': color,
-        'other.date': date
+        'other.date': date,
       });
 
       return { message: 'Product other is changed' };

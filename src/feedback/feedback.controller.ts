@@ -21,14 +21,14 @@ export class FeedbackController {
   async create(
     @Body() createFeedbackDto: CreateFeedbackDto,
     @Param('product') product: string,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response
   ) {
     try {
       const data = await this.feedbackService.create(createFeedbackDto, product, req);
       return res.status(HttpStatus.CREATED).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -53,14 +53,14 @@ export class FeedbackController {
   @Delete(':id')
   async remove(
     @Param('id') id: string,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response
   ) {
     try {
       const data = await this.feedbackService.remove(id, req);
       return res.status(HttpStatus.OK).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 }

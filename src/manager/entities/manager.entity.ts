@@ -9,10 +9,13 @@ export type ManagerDocument = HydratedDocument<Manager>;
 @Schema()
 export class Manager {
     _id: string
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    user: User
+    
     @Prop()
     description: string
+
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    user: User
+    
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
     product: Product[]
     

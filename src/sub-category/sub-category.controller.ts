@@ -14,16 +14,16 @@ import { RoleGuard } from 'src/auth/roles.guard';
 export class SubCategoryController {
   constructor(private readonly subCategoryService: SubCategoryService) { }
 
-  // @ApiBearerAuth('JWT-auth')
-  // @HasRoles(Role.ADMIN)
-  // @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
   async create(@Body() createSubCategoryDto: CreateSubCategoryDto, @Res() res: Response) {
     try {
       const data = await this.subCategoryService.create(createSubCategoryDto);
       return res.status(HttpStatus.CREATED).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -34,7 +34,7 @@ export class SubCategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -45,7 +45,7 @@ export class SubCategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -59,7 +59,7 @@ export class SubCategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -72,7 +72,7 @@ export class SubCategoryController {
       const data = await this.subCategoryService.remove(id);
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 }

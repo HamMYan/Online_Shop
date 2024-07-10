@@ -34,7 +34,7 @@ export class AuthController {
       const data = await this.userService.create(createUserDto);
       return res.status(HttpStatus.CREATED).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 
@@ -54,7 +54,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message });
+      return res.status(HttpStatus.OK).json({ message: err.message });
     }
   }
 }

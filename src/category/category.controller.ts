@@ -36,7 +36,7 @@ export class CategoryController {
       const data = await this.categoryService.create(createCategoryDto, file)
       return res.status(HttpStatus.CREATED).json(data);
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -47,7 +47,7 @@ export class CategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -58,7 +58,7 @@ export class CategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -83,7 +83,7 @@ export class CategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -97,7 +97,7 @@ export class CategoryController {
       return res.status(HttpStatus.OK).json(data)
     }
     catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 }

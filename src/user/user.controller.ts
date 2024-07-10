@@ -32,7 +32,7 @@ export class UserController {
       const data = await this.userService.findOne(id)
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.NOT_FOUND).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -42,14 +42,14 @@ export class UserController {
   @Patch('updateData')
   async updateData(
     @Body() updateUserDto: UpdateUserDto,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
       const data = await this.userService.updateData(req, updateUserDto);
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -69,14 +69,14 @@ export class UserController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async updateImage(
     @UploadedFile() file,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response
   ) {
     try {
       const data = await this.userService.updateImage(req, file)
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -87,14 +87,14 @@ export class UserController {
   @Patch('updatePassword')
   async updatePassword(
     @Body() updtaeUserPassword: UpdtaeUserPassword,
-    @Req() req: Request,
+    @Req() req,
     @Res() res: Response
   ) {
     try {
       const data = await this.userService.updatePassword(req, updtaeUserPassword)
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -104,7 +104,7 @@ export class UserController {
       const data = await this.userService.forgotPassword(email)
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -114,7 +114,7 @@ export class UserController {
       const data = await this.userService.resetPassword(resetPassword)
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 
@@ -122,12 +122,12 @@ export class UserController {
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.CUSTOMER, Role.MANAGER, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async deleteAccount(@Req() req: Request, @Res() res: Response) {
+  async deleteAccount(@Req() req, @Res() res: Response) {
     try {
       const data = await this.userService.deleteAccount(req)
       return res.status(HttpStatus.OK).json(data)
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message })
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 }
