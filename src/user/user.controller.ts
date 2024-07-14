@@ -24,6 +24,19 @@ export class UserController {
   }
 
   @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.ADMIN, Role.MANAGER, Role.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('profile')
+  async getProfile(@Req() req, @Res() res: Response) {
+    try {
+      const user = await this.userService.getProfile(req.user.id);
+      return res.status(HttpStatus.OK).json({ user });
+    } catch (err) {
+      return res.status(HttpStatus.OK).json({ message: err.message });
+    }
+  }
+
+  @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
@@ -63,7 +76,7 @@ export class UserController {
       type: 'object',
       properties: {
         image: { type: 'string', format: 'binary' }
-      }
+      } 
     }
   })
   @UseInterceptors(FileInterceptor('image', multerOptions))

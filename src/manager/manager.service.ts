@@ -10,7 +10,7 @@ import { Manager } from './entities/manager.entity';
 
 @Injectable()
 export class ManagerService {
-  constructor(@InjectModel('Manager') private managerModel: Model<Manager>) {}
+  constructor(@InjectModel('Manager') private managerModel: Model<Manager>) { }
 
   async findAll() {
     const managers = await this.managerModel
@@ -44,9 +44,10 @@ export class ManagerService {
       throw new BadRequestException(
         'Do you cannot update this account data becouse its not uour account',
       );
+
     const { description, cardNumber } = updateManagerData;
     await this.managerModel.findByIdAndUpdate(id, { description, cardNumber });
-    
+
     return { message: 'Manager data updated' };
   }
 }
