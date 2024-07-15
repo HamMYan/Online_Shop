@@ -35,7 +35,7 @@ export class UserService {
     @InjectModel('Feedback') private feedbackModel: Model<Feedback>,
     @InjectModel('Order') private orderModel: Model<Order>,
     private readonly emailService: EmailService,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const {
@@ -118,36 +118,45 @@ export class UserService {
     return users;
   }
 
-
   async getProfile(id) {
     const user = await this.userModel.findById(id);
     if (!user) throw new NotFoundException('User not found');
 
     if (user.role.includes(1)) {
-      const manager = await this.managerModel.findById(user.manager._id)
+      const manager = await this.managerModel
+        .findById(user.manager._id)
         .select('description')
         .populate('user')
         .select('firstName lastName age username image phoneNumber')
-        .populate('product')
+        .populate('product');
 
       if (!manager) throw new NotFoundException('Manager not found');
-
 
       return manager;
     }
 
     if (user.role.includes(2)) {
-      const customer = await this.customerModel.findById(user.customer._id)
+      const customer = await this.customerModel
+        .findById(user.customer._id)
         .select('wish order feedback')
         .populate('user')
         .select('firstName lastName age username image phoneNumber')
-        .populate('product')
+        .populate('product');
 
       if (!customer) throw new NotFoundException('Customer not found');
 
       return customer;
     }
 
+    if (user.role.includes(0)) {
+      const admin = await this.userModel
+        .findById(user.customer._id)
+        .select('firstName lastName age username image phoneNumber');
+
+      if (!admin) throw new NotFoundException('Admin not found');
+
+      return admin;
+    }
 
   }
 
@@ -172,7 +181,7 @@ export class UserService {
     const { firstName, lastName, age, phoneNumber } = updateUserDto;
     const userInPhonenumber = await this.userModel.findOne({ phoneNumber });
     if (userInPhonenumber)
-      throw new BadRequestException(`${phoneNumber} - has arleady`)
+      throw new BadRequestException(`${phoneNumber} - has arleady`);
 
     await this.userModel.findByIdAndUpdate(req.user.id, {
       firstName,

@@ -6,6 +6,14 @@ import { OrderStatus } from './order-status';
 
 export type OrderDocument = HydratedDocument<Order>;
 
+export interface OrderItem {
+  price: number;
+    productName: string;
+    productImage: string;
+    productId: string;
+    quantity: number;
+}
+
 @Schema()
 export class Order {
   @Prop()
@@ -20,7 +28,7 @@ export class Order {
       productName: { type: String },
       productImage: { type: String },
       productId: { type: String },
-      quantity: { type: Number }
+      quantity: { type: Number },
     }),
   ])
   order: {
@@ -30,7 +38,6 @@ export class Order {
     productId: string;
     quantity: number;
   }[];
-
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })
   customer: Customer;

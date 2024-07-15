@@ -15,6 +15,7 @@ import { OrderModule } from './order/order.module';
 import { EmailModule } from './email/email.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { StripeModule } from './stripe/stripe.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     CardModule,
     OrderModule,
     EmailModule,
+    StripeModule,
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),  
     MailerModule.forRoot({
       transport: {
