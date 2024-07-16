@@ -6,22 +6,31 @@ import { Model } from 'mongoose';
 import { Feedback } from './entities/feedback.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
+import { Order } from 'src/order/entities/order.entity';
 
 @Injectable()
 export class FeedbackService {
   constructor(
     @InjectModel('Feedback') private feedbackModel: Model<Feedback>,
     @InjectModel('Product') private productModel: Model<Product>,
-    @InjectModel('Customer') private customerModel: Model<Customer>
+    @InjectModel('Customer') private customerModel: Model<Customer>,
+    @InjectModel('Order') private orderModel: Model<Order>,
   ) { }
 
   async create(createFeedbackDto: CreateFeedbackDto, product: string, req) {
+    const customer = await this.customerModel.findById(req.user.id)
+    if (!customer) throw new BadRequestException('Customer not found')
+
     const { text } = createFeedbackDto
     const prod = await this.productModel.findOne({ id: product, status: 1 })
 
-    if (!product) throw new BadRequestException('Product not found')
+    if (!prod) throw new BadRequestException('Product not found')
 
-    // const customer = 
+    const order = await this.orderModel.findById(customer.order, {
+      'order.productId': prod.id
+    });
+
+    if (!order) throw new BadRequestException('Order not found or product not in order')
 
     const feedback = await this.feedbackModel.create({
       product,
@@ -36,16 +45,15 @@ export class FeedbackService {
     return feedback
   }
 
-  async findAll() {
-    return `This action returns all feedback`;
-  }
+  async update(id, userId, updateFeedbackDto) {
+    const feedback = await this.feedbackModel.findById(id)
+    if (!feedback) throw new BadRequestException('Feedback not found')
+    if (feedback.customer.toString() !== userId) throw new BadRequestException('You are not the owner')
 
-  async findOne(id: number) {
-    return `This action returns a #${id} feedback`;
-  }
+    const { text } = updateFeedbackDto
+    const updatedFeedback = await this.feedbackModel.findByIdAndUpdate(id, { text })
 
-  async update(id: number, updateFeedbackDto: UpdateFeedbackDto) {
-    return `This action updates a #${id} feedback`;
+    return {message:'Feedback updated'}
   }
 
   async remove(id: string, req) {
@@ -55,7 +63,7 @@ export class FeedbackService {
     if (feedback.customer.toString() !== req.user.id) throw new BadRequestException('You cannot delete this feedback because you did not install it')
 
     await this.feedbackModel.findByIdAndDelete(id)
-    
+
     return { message: 'Your feedback is deleted' }
   }
 }

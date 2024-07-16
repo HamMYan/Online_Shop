@@ -23,7 +23,7 @@ import { AddCustomerPayment, UpdateCustomerDto } from './dto/update-customer.dto
 @ApiTags('Customer')
 @Controller('customer')
 export class CustomerController {
-  constructor(private readonly customerService: CustomerService) {}
+  constructor(private readonly customerService: CustomerService) { }
 
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.CUSTOMER)
@@ -31,14 +31,48 @@ export class CustomerController {
   @Patch('addPayment')
   async addPayment(
     @Req() req,
-    @Res() res:Response,
+    @Res() res: Response,
     @Body() addCustomerPayment: AddCustomerPayment,
   ) {
-    try{
-      const data = await this.customerService.addPayment(req.user.id,addCustomerPayment)
-      return res.status(HttpStatus.OK).json({data})
-    }catch(err){
-      return res.status(HttpStatus.OK).json({message:err.message})
+    try {
+      const data = await this.customerService.addPayment(req.user.id, addCustomerPayment)
+      return res.status(HttpStatus.OK).json({ data })
+    } catch (err) {
+      return res.status(HttpStatus.OK).json({ message: err.message })
+    }
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Patch('update')
+  async update(
+    @Req() req,
+    @Res() res: Response,
+    @Body() updateCustomerDto: UpdateCustomerDto,
+  ) {
+    try {
+      const data = await this.customerService.update(req.user.id, updateCustomerDto)
+      return res.status(HttpStatus.OK).json({ data })
+    } catch (err) {
+      return res.status(HttpStatus.OK).json({ message: err.message })
+    }
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Patch('addWish:id')
+  async addWish(
+    @Req() req,
+    @Res() res: Response,
+    @Param('id') id: string
+  ) {
+    try {
+      const data = await this.customerService.addWish(req.user.id,id)
+      return res.status(HttpStatus.OK).json({ data })
+    } catch (err) {
+      return res.status(HttpStatus.OK).json({ message: err.message })
     }
   }
 }

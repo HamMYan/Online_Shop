@@ -32,19 +32,23 @@ export class FeedbackController {
     }
   }
 
-  @Get()
-  findAll() {
-    return this.feedbackService.findAll();
-  }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.feedbackService.findOne(+id);
-  }
-
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFeedbackDto: UpdateFeedbackDto) {
-    return this.feedbackService.update(+id, updateFeedbackDto);
+  async update(
+    @Param('id') id: string, 
+    @Body() updateFeedbackDto: UpdateFeedbackDto,
+    @Req() req,
+    @Res() res: Response
+  ) {
+    try {
+      const data = await this.feedbackService.update(id, req.user.id, updateFeedbackDto);
+      return res.status(HttpStatus.OK).json(data);
+    } catch (err) {
+      return res.status(HttpStatus.OK).json({ message: err.message });
+    }
   }
 
   @ApiBearerAuth('JWT-auth')

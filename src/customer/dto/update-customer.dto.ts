@@ -6,10 +6,6 @@ export class UpdateCustomerDto {
   @JoiSchema(Joi.array().items(Joi.string()).required())
   @ApiProperty()
   card: string[];
-
-  @JoiSchema(Joi.array().items(Joi.string()).required())
-  @ApiProperty()
-  payment: string[];
 }
 
 export class AddCustomerPayment {

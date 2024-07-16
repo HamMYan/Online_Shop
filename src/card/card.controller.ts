@@ -24,7 +24,7 @@ import { UpdateCardDto } from './dto/update-card.dto';
 @ApiTags('Card')
 @Controller('card')
 export class CardController {
-  constructor(private readonly cardService: CardService) {}
+  constructor(private readonly cardService: CardService) { }
 
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.CUSTOMER)
@@ -56,8 +56,21 @@ export class CardController {
     return await this.cardService.findAll(req.user.id);
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @HasRoles(Role.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardService.remove(+id);
+  async remove(
+    @Param('id') id: string,
+    @Req() req,
+    @Res() res: Response
+  ) {
+    try {
+      const data = await this.cardService.remove(id, req.user.id);
+      return res.status(HttpStatus.OK).json(data);
+    } catch (err) {
+      return res.status(HttpStatus.BAD_REQUEST).json({ message: err.message });
+    }
   }
+  
 }

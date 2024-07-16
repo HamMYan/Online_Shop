@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PaymentDto {
     @ApiProperty()
-    data: number []
+    data: string []
     // {
     //     price_data: {
     //         productId: number,
@@ -11,7 +11,7 @@ export class PaymentDto {
     //     quantity: number
     // }[]
     @ApiProperty()
-    currency: string
+    currency: number
 
 }
 

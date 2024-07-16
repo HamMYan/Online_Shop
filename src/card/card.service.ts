@@ -13,7 +13,7 @@ export class CardService {
     @InjectModel('Card') private cardModel: Model<Card>,
     @InjectModel('Customer') private customerModel: Model<Customer>,
     @InjectModel('Product') private productModel: Model<Product>,
-  ) {}
+  ) { }
 
   async create(id, product, createCardDto: CreateCardDto) {
     const customer = await this.customerModel.findById(id);
@@ -55,15 +55,16 @@ export class CardService {
     return cards;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} card`;
+  async remove(id: string, userId: string) {
+    const customer = await this.customerModel.findById(userId);
+    if (!customer) throw new BadRequestException('Customer not found');
+  
+    const card = await this.cardModel.findById(id);
+    if (!card) throw new BadRequestException('Card not found');
+    if (card.customer.toString() !== userId) return { message: 'You cannot remove this card because it is not yours' };
+  
+    await this.cardModel.findByIdAndDelete(id);
+  
+    return { message: 'Card removed' };
   }
-
-  update(id: number, updateCardDto: UpdateCardDto) {
-    return `This action updates a #${id} card`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} card`;
-  }
-}
+}  

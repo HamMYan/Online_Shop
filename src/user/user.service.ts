@@ -141,7 +141,6 @@ export class UserService {
         .select('wish order feedback')
         .populate('user')
         .select('firstName lastName age username image phoneNumber')
-        .populate('product');
 
       if (!customer) throw new NotFoundException('Customer not found');
 
