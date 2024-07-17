@@ -21,6 +21,7 @@ export class CardService {
 
     const prod = await this.productModel.findById(product);
     if (!prod) throw new BadRequestException('Product not found');
+    if(prod.status !== 1) throw new BadRequestException('Product not found')
 
     const card = await this.cardModel.findOne({
       customer: id,

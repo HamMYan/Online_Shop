@@ -23,6 +23,7 @@ import {
   ApiConsumes,
   ApiHeader,
   ApiHeaders,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -38,6 +39,7 @@ import {
   UpdateProductData,
   UpdateProductStatus,
 } from './dto/update-product.dto';
+import { SearchProduct } from './dto/search-product.dto';
 
 @ApiTags('Product')
 @Controller('product')
@@ -131,7 +133,7 @@ export class ProductController {
   @HasRoles(Role.MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('myAllProducts')
-  async findMyAllProducts(@Req() req,) {
+  async findMyAllProducts(@Req() req) {
     return await this.productService.findMyAllProducts(req);
   }
 
@@ -143,11 +145,24 @@ export class ProductController {
     return await this.productService.myRejectedProds(req);
   }
 
-  @Get(':id')
+  @Get('find/:id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.productService.findOne(id);
       return res.status(HttpStatus.CREATED).json(data);
+    } catch (err) {
+      return res.status(HttpStatus.OK).json({ message: err.message });
+    }
+  }
+
+  @Get('search')
+  async search(
+    @Query() searchProduct: SearchProduct,
+    @Res() res: Response,
+  ) {
+    try {
+      const data = await this.productService.search( searchProduct);
+      return res.status(HttpStatus.OK).json(data);
     } catch (err) {
       return res.status(HttpStatus.OK).json({ message: err.message });
     }
@@ -329,11 +344,7 @@ export class ProductController {
   @HasRoles(Role.MANAGER, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
-  async remove(
-    @Param('id') id: string,
-    @Req() req,
-    @Res() res: Response,
-  ) {
+  async remove(@Param('id') id: string, @Req() req, @Res() res: Response) {
     try {
       const data = await this.productService.remove(id, req);
       return res.status(HttpStatus.OK).json(data);

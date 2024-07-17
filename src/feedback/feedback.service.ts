@@ -38,6 +38,10 @@ export class FeedbackService {
       customer: req.user.id
     })
 
+    await this.customerModel.findByIdAndUpdate(req.user.id, {
+      $push: { feedback }
+    })
+
     await this.productModel.findByIdAndUpdate(product, {
       $push: { feedback }
     })

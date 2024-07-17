@@ -45,7 +45,7 @@ export class StripeController {
         data: {
           type: 'array',
           items: {
-            type: 'number',
+            type: 'string',
           },
         },
       },
@@ -92,7 +92,7 @@ export class StripeController {
   @Get('cancel')
   async cancelData(@Req() req, @Res() res: Response) {
     try {
-      const data = await this.stripeService.cancel(req.user.userId);
+      const data = await this.stripeService.cancel(req.user.id);
       return res.status(HttpStatus.OK).json(data);
     } catch (e) {
       return res.status(HttpStatus.BAD_REQUEST).json({ message: e.message });

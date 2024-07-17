@@ -11,7 +11,7 @@ export class PaymentDto {
     //     quantity: number
     // }[]
     @ApiProperty()
-    currency: number
+    currency: string
 
 }
 

@@ -15,6 +15,8 @@ import {
 import { Manager } from 'src/manager/entities/manager.entity';
 import * as fs from 'fs';
 import { join } from 'path';
+import { SearchProduct } from './dto/search-product.dto';
+import { string } from 'joi';
 
 @Injectable()
 export class ProductService {
@@ -96,6 +98,50 @@ export class ProductService {
       .populate('subCategory');
     if (!product) throw new NotFoundException('Product not found');
     return product;
+  }
+
+  async search(searchProduct: SearchProduct) {
+    const { subCategory, name, minPrice, maxPrice, page, limit } =
+      searchProduct;
+    let subCat: any;
+    if (subCategory) {
+      subCat = await this.subCategoryModel.findOne({ name: subCategory });
+      if (!subCat) throw new BadRequestException('SubCategory not found');
+    }
+
+    const cat = typeof subCat ? subCat : undefined;
+
+    const products = await this.productModel.find({
+      status:1,
+      $or: [
+        {
+          subCategory: cat,
+          name: { $regex: name ? name : '', $options: 'i' },
+          price: {
+            $gte: minPrice ? minPrice : 0,
+            $lt: maxPrice ? maxPrice : Infinity,
+          },
+        },
+        {
+          name: { $regex: name ? name : '', $options: 'i' },
+          price: {
+            $gte: minPrice ? minPrice : 0,
+            $lt: maxPrice ? maxPrice : Infinity,
+          },
+        },
+      ],
+    });
+    const count = await this.productModel.find({
+      status:1
+    })
+    console.log((page-1)*limit, (page-1)*limit+ +limit);
+    
+    return {
+      count:count.length,
+      limit:+limit,
+      page:+page,
+      products:products.slice((page-1)*limit, (page-1)*limit+ +limit),
+    };
   }
 
   async updateData(id: string, updateProductData: UpdateProductData, req) {

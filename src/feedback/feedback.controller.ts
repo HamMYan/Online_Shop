@@ -54,6 +54,7 @@ export class FeedbackController {
   @ApiBearerAuth('JWT-auth')
   @HasRoles(Role.CUSTOMER)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  
   @Delete(':id')
   async remove(
     @Param('id') id: string,

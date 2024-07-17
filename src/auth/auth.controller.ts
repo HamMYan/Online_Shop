@@ -12,7 +12,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Login } from 'src/user/dto/update-user.dto';
@@ -28,6 +28,7 @@ export class AuthController {
     private readonly userService: UserService,
   ) { }
 
+  @ApiResponse({description:'Register by user data'})
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
@@ -38,6 +39,8 @@ export class AuthController {
     }
   }
 
+
+  @ApiResponse({description:'Login by user email and password'})
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req, @Body() log: Login){
